@@ -4,6 +4,7 @@
 
 In this assignment, you will build an interactive dashboard to explore the [Belly Button Biodiversity DataSet](http://robdunnlab.com/projects/belly-button-biodiversity/).
 
+Tools Used : Javascript, Heroku, Plotly library, Python, Flask
 ## Step 1 - Plotly.js
 
 Use Plotly.js to build interactive charts for your dashboard.
@@ -47,10 +48,6 @@ Use Plotly.js to build interactive charts for your dashboard.
 
 Deploy your Flask app to Heroku.
 
-* You can use the provided sqlite file for the database.
-
-* Ask your Instructor and TAs for help!
-
 - - -
 
 ## Advanced Challenge Assignment (Optional)
@@ -84,6 +81,7 @@ Use Flask API starter code to serve the data needed for your plots.
 * Refer to the [Plotly.js Documentation](https://plot.ly/javascript/) when building the plots.
 
 - - -
+Author : Chol K. Gurung
 
 ### Copyright
 
