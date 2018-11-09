@@ -13,28 +13,27 @@ function buildMetadata(sample) {
     // Use `Object.entries` to add each key and value pair to the panel
     // Hint: Inside the loop, you will need to use d3 to append new
     // tags for each key-value in the metadata.
+    
     d3.json(url).then(function(sam_metadata){
       var selector = d3.select("#sample-metadata");
       selector.html("");
       
+        
       Object.entries(sam_metadata).forEach(([key, value]) => {
-          
-          // Append table row with cell data
-          // for each key, value pair 
-          // var row = metaData.append("tr");
-          // var cell1 = row.append("td");
-          // var cell2 = row.append("td");
-          // cell1.text(`${key}:`);
-          // cell2.text(`${value}`);
           var row = selector.append("p");
           row.text(`${key}: ${value}`);
+          if (key === "WFREQ")
+          {
+            buildGauge(value);
+          }
           //selector.append("li").text(`${key} : ${value}`);
           //selector.exit().remove();
         });
       });
     // BONUS: Build the Gauge Chart
     // buildGauge(data.WFREQ);
-    buildGauge(sample.wfreq);
+    //console.log("wfreq value", wfreq);
+    
 
 }
 
@@ -81,12 +80,20 @@ function builtPie(sample){
     var url = "/samples/" + sample;
     d3.json(url).then(function(sampleData){
       
-      
-      var labelSlice = sampleData.otu_labels.slice(0,10);
-      var idSlice = sampleData.otu_ids.slice(0,10);
+      // var otu_id_list = sampleData.otu_ids;
+      // var otu_sample_list = sampleData.sample_values;
+      // var sortedSample = {};
+      // otu_id_list.forEach((key, i) => sortedSample[key] = otu_sample_list[i]);
+      // console.log("sorted pie value", otu_id_list);
+      // sortedSample.sort(function(a,b){
+      //     return parseInt(b[1]) - parseInt(a[1]);
+      // });
+      var sortedSample = sampleData;
+      var labelSlice = sortedSample.otu_labels.slice(0,10);
+      var idSlice = sortedSample.otu_ids.slice(0,10);
       var trace2 = {
         type : "pie",
-        values : sampleData.sample_values.slice(0,10),
+        values : sortedSample.sample_values.slice(0,10),
         labels: idSlice,
         text : labelSlice,
         textinfo: "percent"
@@ -106,12 +113,13 @@ function builtPie(sample){
 //built a gauge chart
 function buildGauge(wfreq){
 
-  var gauge = d3.select("#gauge");
+  //var gauge = d3.select("#gauge");
+  let gauge = document.getElementById("gauge");
   ///////////////  BONUS: Gauge Chart  ///////////////
    // d3.json("/wfreq/${sample}", function(response){
     // Enter a speed between 0 and 180
     var washLevel = wfreq;
-    console.log(`Washing is ${washLevel}`);
+    console.log(`Washing is `,wfreq);
 
         
     // Convert washLevel to appropriate gauge level
@@ -167,6 +175,7 @@ function buildGauge(wfreq){
           color: '850000'
         } 
       }],
+     
       title: 'Scrubs per Week',
       height: 500,
       width: 500,
@@ -216,7 +225,6 @@ function optionChanged(newSample) {
   // Fetch new data each time a new sample is selected
   buildCharts(newSample);
   buildMetadata(newSample);
-  buildGauge(newSample);
 }
 
 // Initialize the dashboard
