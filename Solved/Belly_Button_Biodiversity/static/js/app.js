@@ -88,7 +88,9 @@ function builtPie(sample){
       // sortedSample.sort(function(a,b){
       //     return parseInt(b[1]) - parseInt(a[1]);
       // });
-      var sortedSample = sampleData;
+      sortedSample = sortSamples(sampleData);
+      //var sortedSample = sampleData;
+      console.log("insided srted index",sortedSample);
       var labelSlice = sortedSample.otu_labels.slice(0,10);
       var idSlice = sortedSample.otu_ids.slice(0,10);
       var trace2 = {
@@ -199,6 +201,45 @@ function buildGauge(wfreq){
 
 }
 
+
+function sortList(_list) {
+  _list.sort(function(a, b) {
+    return (b[0] - a[0]);
+  });
+  return _list;
+}
+
+function sortSamples(_data) {
+  let _sampleValues = _data["sample_values"]; 
+  let sampleWithIndices = [];
+  
+  for (var i = 0; i < _sampleValues.length; i++) {
+    sampleWithIndices.push([_sampleValues[i], i]);
+  }
+  // Now we sort this new list according to values while preserving the index of each element
+  let _sortedSampleValues = sortList(sampleWithIndices); // contains sorted list
+  
+  
+  let sortedSampleValues = [];
+  let sortedOtuLabel = [];
+  let sortedOtuId = [];
+  
+  for (i = 0; i < _sortedSampleValues.length; i++) {
+    
+    let correctIndex = _sortedSampleValues[i][1];
+    sortedOtuLabel.push(_data["otu_labels"][correctIndex]);
+    sortedOtuId.push(_data["otu_ids"][correctIndex]);
+    sortedSampleValues.push(_data["sample_values"][correctIndex]);
+  }
+  console.log("")
+  _data["otu_label"] = sortedOtuLabel;
+  _data["otu_id"] = sortedOtuId;
+  _data["sample_values"] = sortedSampleValues;
+  
+  return _data;
+}
+
+
 function init() {
   // Grab a reference to the dropdown select element
   var selector = d3.select("#selDataset");
@@ -231,7 +272,3 @@ function optionChanged(newSample) {
 init();
 // Add event listener for submit button
 d3.select("#selDataset").on("onchange", optionChanged);
-const port = process.env.PORT || 8000;
-server.listen(port, () => {
-    console.log("App is running on port " + port);
-});
